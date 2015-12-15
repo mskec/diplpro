@@ -1,53 +1,39 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react-native';
+let {
   AppRegistry,
   StyleSheet,
-  Text,
-  View,
+  NavigatorIOS
 } = React;
 
-var code = React.createClass({
+import WelcomeScreen from './WelcomeScreen';
+import appColors from './appColors';
+
+let App = React.createClass({
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native! aa
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <NavigatorIOS
+        style={styles.container}
+        titleTextColor="#ccc"
+        barTintColor={appColors.background}
+        itemWrapperStyle={styles.itemWrapper}
+        initialRoute={{
+          title: 'App name',
+          component: WelcomeScreen
+        }}
+      />
     );
   }
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flex: 1
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  itemWrapper: {
+    backgroundColor: appColors.background
+  }
 });
 
-AppRegistry.registerComponent('code', () => code);
+AppRegistry.registerComponent('code', () => App);
