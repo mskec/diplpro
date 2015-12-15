@@ -1,0 +1,11 @@
+{
+  "name": "code",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "$NVM_BIN/react-native start"
+  },
+  "dependencies": {
+    "react-native": "^0.16.0"
+  }
+}
