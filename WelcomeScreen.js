@@ -3,6 +3,7 @@
 import React from 'react-native';
 let {
   AppRegistry,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -36,8 +37,7 @@ let WelcomeScreen = React.createClass({
     // TODO load categories from server or from cache
   },
 
-  onNameChange: function(event: Object) {
-    var name = event.nativeEvent.text;
+  onNameChange: function(name: String) {
     console.log('onNameChange', name);
 
     let newState = this.state;
@@ -88,7 +88,7 @@ let WelcomeScreen = React.createClass({
           Enter your name
         </Text>
         <TextInput
-          onChange={this.onNameChange}
+          onChangeText={this.onNameChange}
           style={styles.nameInput}
         />
       </View>
@@ -98,8 +98,11 @@ let WelcomeScreen = React.createClass({
   renderCategories: function(categories: Array) {
     var content = categories.map((category, idx) => {
       return (
-      <TouchableOpacity key={idx} onPress={() => this.onCategoryPress(category)}>
-        <Text style={[styles.categoriesTag, category._selected && styles.categoriesTagSelected]}>
+      <TouchableOpacity
+        key={idx}
+        onPress={() => this.onCategoryPress(category)}
+        style={[styles.category, category._selected && styles.categorySelected]}>
+        <Text style={[styles.categoryText, category._selected && styles.categoryTextSelected]}>
           {category.label}</Text>
       </TouchableOpacity>
       );
@@ -117,8 +120,8 @@ let WelcomeScreen = React.createClass({
   renderNext: function() {
     return (
       <View style={styles.nextContainer}>
-        <TouchableOpacity onPress={() => this.onNextPress()}>
-          <Text style={styles.next}>Next</Text>
+        <TouchableOpacity style={styles.next} onPress={() => this.onNextPress()}>
+          <Text style={styles.nextText}>Next</Text>
         </TouchableOpacity>
       </View>
     );
@@ -133,7 +136,7 @@ let styles = StyleSheet.create({
   },
 
   titleContainer: {
-    marginTop: 70,
+    marginTop: Platform.OS === 'ios' ? 70 : 35,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -143,7 +146,7 @@ let styles = StyleSheet.create({
   },
 
   nameContainer: {
-    marginTop: 80,
+    marginTop: Platform.OS === 'ios' ? 80 : 50,
     alignItems: 'flex-start'
   },
   nameInput: {
@@ -151,7 +154,6 @@ let styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#7C7F98',
     borderRadius: 5,
-    borderColor: appColors.borderColor,
     backgroundColor: '#FFF',
     flex: 1,
     height: 35,
@@ -177,7 +179,7 @@ let styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
-  categoriesTag: {
+  category: {
     backgroundColor: '#FFF',
     borderRadius: 13,
     borderStyle: 'solid',
@@ -188,20 +190,24 @@ let styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderLeftWidth: 1,
 
-    color: appColors.fontGrey,
-    fontSize: 16,
-    fontWeight: 'bold',
     padding: 5,
     paddingLeft: 10,
     paddingRight: 10,
     marginRight: 10,
     marginBottom: 10
   },
-  categoriesTagSelected: {
+  categorySelected: {
     backgroundColor: appColors.background,
-    color: appColors.fontColor,
     borderWidth: 1,
     borderColor: appColors.borderGrey
+  },
+  categoryText: {
+    color: appColors.fontGrey,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  categoryTextSelected: {
+    color: appColors.fontColor
   },
 
   nextContainer: {
@@ -211,14 +217,16 @@ let styles = StyleSheet.create({
     alignItems: 'center'
   },
   next: {
-    color: appColors.fontColor,
-    fontSize: 16,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: appColors.borderGrey,
     padding: 5,
     paddingLeft: 10,
     paddingRight: 10
+  },
+  nextText: {
+    color: appColors.fontColor,
+    fontSize: 16
   }
 });
 

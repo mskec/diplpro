@@ -4,49 +4,46 @@
  */
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react-native';
+let {
   AppRegistry,
   StyleSheet,
-  Text,
-  View,
+  Navigator
 } = React;
 
-var code = React.createClass({
+import WelcomeScreen from './WelcomeScreen';
+import appColors from './appColors';
+
+
+let RouteMapper = (route, navigator) => {
+  if (route.name === 'welcome') {
+    return <WelcomeScreen />;
+  }
+};
+
+let App = React.createClass({
+  getInitialState: function() {
+    return {
+      initialRoute: {name: 'welcome'}
+    };
+  },
+
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native! aa
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <Navigator
+        style={styles.container}
+        initialRoute={this.state.initialRoute}
+        renderScene={RouteMapper}
+      />
     );
   }
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    backgroundColor: appColors.background
+  }
 });
 
-AppRegistry.registerComponent('code', () => code);
+AppRegistry.registerComponent('code', () => App);
