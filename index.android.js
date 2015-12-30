@@ -5,7 +5,7 @@
 'use strict';
 
 import React from 'react-native';
-let {
+const {
   AppRegistry,
   StyleSheet,
   Navigator
@@ -15,20 +15,20 @@ import WelcomeScreen from './WelcomeScreen';
 import appColors from './appColors';
 
 
-let RouteMapper = (route, navigator) => {
+const RouteMapper = (route, navigator) => {
   if (route.name === 'welcome') {
     return <WelcomeScreen />;
   }
 };
 
-let App = React.createClass({
-  getInitialState: function() {
-    return {
-      initialRoute: {name: 'welcome'}
-    };
-  },
+class App extends React.Component {
+  constructor() {
+    super();
 
-  render: function() {
+    this.state = {initialRoute: {name: 'welcome'}};
+  }
+
+  render() {
     return (
       <Navigator
         style={styles.container}
@@ -37,9 +37,9 @@ let App = React.createClass({
       />
     );
   }
-});
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: appColors.background

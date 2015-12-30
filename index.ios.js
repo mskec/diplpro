@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react-native';
-let {
+const {
   AppRegistry,
   StyleSheet,
   NavigatorIOS
@@ -10,8 +10,8 @@ let {
 import WelcomeScreen from './WelcomeScreen';
 import appColors from './appColors';
 
-let App = React.createClass({
-  render: function() {
+class App extends React.Component {
+  render() {
     return (
       <NavigatorIOS
         style={styles.container}
@@ -25,9 +25,9 @@ let App = React.createClass({
       />
     );
   }
-});
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1
   },

@@ -1,15 +1,15 @@
 'use strict';
 
 import React from 'react-native';
-let {
+const {
   AppRegistry,
   StyleSheet,
   Text,
   View,
 } = React;
 
-let ExploreScreen = React.createClass({
-  render: function() {
+class ExploreScreen extends React.Component {
+  render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
@@ -18,9 +18,9 @@ let ExploreScreen = React.createClass({
       </View>
     );
   }
-});
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

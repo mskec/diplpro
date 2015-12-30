@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react-native';
-let {
+const {
   AppRegistry,
   Platform,
   StyleSheet,
@@ -14,7 +14,7 @@ let {
 import appColors from './appColors';
 
 
-let categories = [
+const categories = [
   {label: 'Comedy'},
   {label: 'Sports'},
   {label: 'Technology'},
@@ -24,40 +24,43 @@ let categories = [
   {label: 'Gaming'}
 ];
 
-let WelcomeScreen = React.createClass({
+class WelcomeScreen extends React.Component {
 
-  getInitialState: function() {
-    return {
+  constructor() {
+    super();
+    this.state = {
       categories: categories,
       name: ''
     };
-  },
 
-  componentDidMount: function() {
+    this.onNameChange = this.onNameChange.bind(this);
+    this.onCategoryPress = this.onCategoryPress.bind(this);
+    this.onNextPress = this.onNextPress.bind(this);
+  }
+
+  componentDidMount() {
     // TODO load categories from server or from cache
-  },
+  }
 
-  onNameChange: function(name: String) {
+  onNameChange(name: String) {
     console.log('onNameChange', name);
 
-    let newState = this.state;
-    newState.name = name;
-    this.setState(newState);
-  },
+    this.setState(Object.assign(this.state, {name: name}));
+  }
 
-  onCategoryPress: function(category: Object) {
+  onCategoryPress(category: Object) {
     console.log('onCategoryPress', category);
     category._selected = !category._selected;
 
     this.forceUpdate();
-  },
+  }
 
-  onNextPress: function() {
+  onNextPress() {
     // TODO validation and next screen
     console.log('onNextPress', this.state);
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <View style={styles.container}>
         {this.renderTitle()}
@@ -69,9 +72,9 @@ let WelcomeScreen = React.createClass({
         {this.renderNext()}
       </View>
     );
-  },
+  }
 
-  renderTitle: function() {
+  renderTitle() {
     return (
       <View style={styles.titleContainer}>
         <Text style={styles.title}>
@@ -79,9 +82,9 @@ let WelcomeScreen = React.createClass({
         </Text>
       </View>
     );
-  },
+  }
 
-  renderName: function() {
+  renderName() {
     return (
       <View style={styles.nameContainer}>
         <Text style={styles.name}>
@@ -93,9 +96,9 @@ let WelcomeScreen = React.createClass({
         />
       </View>
     );
-  },
+  }
 
-  renderCategories: function(categories: Array) {
+  renderCategories(categories: Array) {
     var content = categories.map((category, idx) => {
       return (
       <TouchableOpacity
@@ -115,9 +118,9 @@ let WelcomeScreen = React.createClass({
       </View>
     </View>
     );
-  },
+  }
 
-  renderNext: function() {
+  renderNext() {
     return (
       <View style={styles.nextContainer}>
         <TouchableOpacity style={styles.next} onPress={() => this.onNextPress()}>
@@ -127,9 +130,9 @@ let WelcomeScreen = React.createClass({
     );
   }
 
-});
+}
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 30
