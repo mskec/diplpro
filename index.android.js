@@ -11,13 +11,17 @@ const {
   Navigator
 } = React;
 
-import WelcomeScreen from './WelcomeScreen';
 import appColors from './appColors';
-
+import ExploreScreen from './ExploreScreen';
+import WelcomeScreen from './WelcomeScreen';
 
 const RouteMapper = (route, navigator) => {
-  if (route.name === 'welcome') {
-    return <WelcomeScreen />;
+  if (route.name === 'Welcome') {
+    return <WelcomeScreen navigator={navigator} />;
+  } else if (route.name === 'Explore') {
+    return <ExploreScreen navigator={navigator} />
+  } else {
+    console.error('Unhandled route!', route);
   }
 };
 
@@ -25,7 +29,7 @@ class App extends React.Component {
   constructor() {
     super();
 
-    this.state = {initialRoute: {name: 'welcome'}};
+    this.state = {initialRoute: {name: 'Welcome'}};
   }
 
   render() {

@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React from 'react-native';
 const {
   AppRegistry,
@@ -11,8 +12,9 @@ const {
   TouchableOpacity
 } = React;
 
+import Alert from './Alert';
 import appColors from './appColors';
-
+import ExploreScreen from './ExploreScreen';
 
 const categories = [
   {label: 'Comedy'},
@@ -56,8 +58,22 @@ class WelcomeScreen extends React.Component {
   }
 
   onNextPress() {
-    // TODO validation and next screen
     console.log('onNextPress', this.state);
+
+    const nameValid = !/^\s*$/.test(this.state.name);
+    const selectedCategories = _.filter(this.state.categories, category => category._selected);
+
+    if (!nameValid || selectedCategories.length === 0) {
+      let message = !nameValid ? 'Enter your name!\n' : '';
+      message += selectedCategories.length === 0 ? 'Select at least one category' : '';
+      return Alert.show(message.trim());
+    }
+
+    // TODO save name and categories to device
+
+    // go to Explore screen
+    Platform.OS === 'ios' && this.props.navigator.resetTo({component: ExploreScreen});
+    Platform.OS === 'android' && this.props.navigator.replace({name: 'Explore'});
   }
 
   render() {
