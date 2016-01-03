@@ -6,24 +6,14 @@
 
 import React from 'react-native';
 const {
-  AppRegistry,
-  StyleSheet,
-  Navigator
+  AppRegistry
 } = React;
 
 import appColors from './appColors';
+import AppNavigator from './AppNavigator';
 import ExploreScreen from './ExploreScreen';
 import WelcomeScreen from './WelcomeScreen';
 
-const RouteMapper = (route, navigator) => {
-  if (route.name === 'Welcome') {
-    return <WelcomeScreen navigator={navigator} />;
-  } else if (route.name === 'Explore') {
-    return <ExploreScreen navigator={navigator} />
-  } else {
-    console.error('Unhandled route!', route);
-  }
-};
 
 class App extends React.Component {
   constructor() {
@@ -34,20 +24,9 @@ class App extends React.Component {
 
   render() {
     return (
-      <Navigator
-        style={styles.container}
-        initialRoute={this.state.initialRoute}
-        renderScene={RouteMapper}
-      />
+      <AppNavigator initialRoute={this.state.initialRoute} />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: appColors.background
-  }
-});
 
 AppRegistry.registerComponent('code', () => App);

@@ -72,8 +72,7 @@ class WelcomeScreen extends React.Component {
     // TODO save name and categories to device
 
     // go to Explore screen
-    Platform.OS === 'ios' && this.props.navigator.resetTo({component: ExploreScreen});
-    Platform.OS === 'android' && this.props.navigator.replace({name: 'Explore'});
+    this.props.navigator.replace({name: 'Explore'});
   }
 
   render() {

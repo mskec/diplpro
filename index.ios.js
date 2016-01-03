@@ -2,38 +2,25 @@
 
 import React from 'react-native';
 const {
-  AppRegistry,
-  StyleSheet,
-  NavigatorIOS
+  AppRegistry
 } = React;
 
-import WelcomeScreen from './WelcomeScreen';
 import appColors from './appColors';
+import AppNavigator from './AppNavigator';
+import WelcomeScreen from './WelcomeScreen';
 
 class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {initialRoute: {name: 'Welcome'}};
+  }
+
   render() {
     return (
-      <NavigatorIOS
-        style={styles.container}
-        titleTextColor="#ccc"
-        barTintColor={appColors.background}
-        itemWrapperStyle={styles.itemWrapper}
-        initialRoute={{
-          title: 'App name',
-          component: WelcomeScreen
-        }}
-      />
+      <AppNavigator initialRoute={this.state.initialRoute} />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  itemWrapper: {
-    backgroundColor: appColors.background
-  }
-});
 
 AppRegistry.registerComponent('code', () => App);
