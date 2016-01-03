@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "$NVM_BIN/react-native start"
+    "start": "./node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
-    "react-native": "^0.16.0",
+    "react-native": "^0.17.0",
     "underscore": "^1.8.3"
   }
 }
