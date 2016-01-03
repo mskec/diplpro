@@ -14,24 +14,16 @@ const {
 
 import Alert from './Alert';
 import appColors from './appColors';
+import AppStorage from './AppStorage';
 import ExploreScreen from './ExploreScreen';
 
-const categories = [
-  {label: 'Comedy'},
-  {label: 'Sports'},
-  {label: 'Technology'},
-  {label: 'Education'},
-  {label: 'Music'},
-  {label: 'Film & TV'},
-  {label: 'Gaming'}
-];
 
 class WelcomeScreen extends React.Component {
 
   constructor() {
     super();
     this.state = {
-      categories: categories,
+      categories: [],
       name: ''
     };
 
@@ -41,7 +33,15 @@ class WelcomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    // TODO load categories from server or from cache
+    AppStorage.getItem('categories')
+      .then((categories) => {
+        this.setState(Object.assign(this.state, {categories: JSON.parse(categories)}));
+      });
+
+    AppStorage.getItem('user.name')
+      .then((username) => {
+        this.setState(Object.assign(this.state, {name: username}));
+      });
   }
 
   onNameChange(name: String) {
@@ -69,7 +69,9 @@ class WelcomeScreen extends React.Component {
       return Alert.show(message.trim());
     }
 
-    // TODO save name and categories to device
+    AppStorage.setItem('user.name', this.state.name);
+    AppStorage.setItem('user.categories', JSON.stringify(selectedCategories));
+    AppStorage.setItem('welcomeShown', 'true');
 
     // go to Explore screen
     this.props.navigator.replace({name: 'Explore'});
@@ -82,7 +84,7 @@ class WelcomeScreen extends React.Component {
 
         {this.renderName()}
 
-        {this.renderCategories(categories)}
+        {this.renderCategories(this.state.categories)}
 
         {this.renderNext()}
       </View>
@@ -106,8 +108,9 @@ class WelcomeScreen extends React.Component {
           Enter your name
         </Text>
         <TextInput
-          onChangeText={this.onNameChange}
           style={styles.nameInput}
+          onChangeText={this.onNameChange}
+          value={this.state.name}
         />
       </View>
     );
