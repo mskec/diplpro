@@ -5,8 +5,8 @@ const {
   AppRegistry
 } = React;
 
-import AppNavigator from './AppNavigator';
-import AppStorage from './AppStorage';
+import AppNavigator from './app/AppNavigator';
+import AppStorage from './app/storage/AppStorage';
 
 
 class App extends React.Component {
@@ -16,7 +16,5 @@ class App extends React.Component {
     );
   }
 }
-
-AppStorage.init();
 
 AppRegistry.registerComponent('code', () => App);

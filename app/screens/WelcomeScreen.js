@@ -12,10 +12,10 @@ const {
   TouchableOpacity
 } = React;
 
-import Alert from './Alert';
-import appColors from './appColors';
-import AppStorage from './AppStorage';
-import ExploreScreen from './ExploreScreen';
+import Alert from '../Alert';
+import appColors from '../appColors';
+import AppStorage from '../storage/AppStorage';
+import VBStorage from '../storage/VBStorage';
 
 
 class WelcomeScreen extends React.Component {
@@ -33,9 +33,9 @@ class WelcomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    AppStorage.getItem('categories')
+    VBStorage.getCategories()
       .then((categories) => {
-        this.setState(Object.assign(this.state, {categories: JSON.parse(categories)}));
+        this.setState(Object.assign(this.state, {categories}));
       });
 
     AppStorage.getItem('user.name')
@@ -69,9 +69,9 @@ class WelcomeScreen extends React.Component {
       return Alert.show(message.trim());
     }
 
-    AppStorage.setItem('user.name', this.state.name);
-    AppStorage.setItem('user.categories', JSON.stringify(selectedCategories));
-    AppStorage.setItem('welcomeShown', 'true');
+    AppStorage.user().setName(this.state.name);
+    AppStorage.user().setCategories(selectedCategories);
+    AppStorage.state('welcomeShown', 'true');
 
     // go to Explore screen
     this.props.navigator.replace({name: 'Explore'});

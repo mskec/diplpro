@@ -10,10 +10,10 @@ const {
 } = React;
 
 import appColors from './appColors';
-import AppStorage from './AppStorage';
-import ExploreScreen from './ExploreScreen';
-import WelcomeScreen from './WelcomeScreen';
-import WatchScreen from './WatchScreen';
+import AppStorage from './storage/AppStorage';
+import ExploreScreen from './screens/ExploreScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
+import WatchScreen from './screens/WatchScreen';
 
 
 const RouteMapper = (route, navigator) => {
@@ -40,11 +40,10 @@ class AppNavigator extends React.Component {
   }
 
   componentDidMount() {
-    AppStorage.getItem('welcomeShown')
+    AppStorage.state('welcomeShown')
       .then((welcomeShown) => {
-        //const routeName = welcomeShown ? 'Explore' : 'Welcome';   // TODO revert
-        const routeName = 'Watch';
-        this.setState(Object.assign(this.state, {initialRoute: {name: routeName}}));
+        const name = welcomeShown ? 'Explore' : 'Welcome';
+        this.setState(Object.assign(this.state, {initialRoute: {name}}));
       });
   }
 

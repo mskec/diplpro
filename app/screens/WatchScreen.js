@@ -12,15 +12,25 @@ class WatchScreen extends React.Component {
   constructor() {
     super();
 
-    this.state = {url: 'https://staging.vibby.com/embed/?vib=XyG_eq0Ttg'}
+    this.state = {url: 'https://staging.vibby.com/embed/?vib=XyG_eq0Ttg'};
+
+    this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
   }
 
+  onNavigationStateChange(navState) {
+    console.log('watch|onNavigationStateChange', navState.url);
+  }
+
+
   render() {
+    console.log('watch|render');
     return (
       <WebView
         style={styles.webView}
         url={this.state.url}
+        onNavigationStateChange={this.onNavigationStateChange}
         allowsInlineMediaPlayback={true}
+        javaScriptEnabled={true}
       />
     );
   }
