@@ -14,6 +14,7 @@ import AppStorage from './storage/AppStorage';
 import ExploreScreen from './screens/ExploreScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import WatchScreen from './screens/WatchScreen';
+import DebugTools from './utils/DebugTools';
 
 
 const RouteMapper = (route, navigator) => {
@@ -28,7 +29,12 @@ const RouteMapper = (route, navigator) => {
     return console.error('Unhandled route!', route);
   }
 
-  return screen;
+  return (
+    <View>
+      {screen}
+      <DebugTools />
+    </View>
+  );
 };
 
 

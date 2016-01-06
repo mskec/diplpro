@@ -45,22 +45,17 @@ class WelcomeScreen extends React.Component {
   }
 
   onNameChange(name: String) {
-    console.log('onNameChange', name);
-
     this.setState(Object.assign(this.state, {name: name}));
   }
 
   onCategoryPress(category: Object) {
-    console.log('onCategoryPress', category);
     category._selected = !category._selected;
 
     this.forceUpdate();
   }
 
   onNextPress() {
-    console.log('onNextPress', this.state);
-
-    const nameValid = !/^\s*$/.test(this.state.name);
+    const nameValid = this.state.name && /^\w+$/.test(this.state.name);
     const selectedCategories = _.filter(this.state.categories, category => category._selected);
 
     if (!nameValid || selectedCategories.length === 0) {
@@ -117,17 +112,7 @@ class WelcomeScreen extends React.Component {
   }
 
   renderCategories(categories: Array) {
-    var content = categories.map((category, idx) => {
-      return (
-      <TouchableOpacity
-        key={idx}
-        onPress={() => this.onCategoryPress(category)}
-        style={[styles.category, category._selected && styles.categorySelected]}>
-        <Text style={[styles.categoryText, category._selected && styles.categoryTextSelected]}>
-          {category.label}</Text>
-      </TouchableOpacity>
-      );
-    });
+    const content = _.map(categories, (category, idx) => this.renderCategory(category, idx));
     return (
     <View style={styles.categoriesContainer}>
       <Text style={styles.categoriesTitle}>Pick categories</Text>
@@ -135,6 +120,20 @@ class WelcomeScreen extends React.Component {
         {content}
       </View>
     </View>
+    );
+  }
+
+  renderCategory(category: Object, idx: Number) {
+    return (
+      <TouchableOpacity
+        key={idx}
+        onPress={() => this.onCategoryPress(category)}
+        style={[styles.category, category._selected && styles.categorySelected]}
+      >
+        <Text style={[styles.categoryText, category._selected && styles.categoryTextSelected]}>
+          {category.label}
+        </Text>
+      </TouchableOpacity>
     );
   }
 
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
   },
 
   titleContainer: {
-    marginTop: Platform.OS === 'ios' ? 70 : 35,
+    marginTop: Platform.OS === 'ios' ? 65 : 30,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
   },
 
   nameContainer: {
-    marginTop: Platform.OS === 'ios' ? 80 : 50,
+    marginTop: Platform.OS === 'ios' ? 75 : 45,
     alignItems: 'flex-start'
   },
   nameInput: {
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   categoriesContainer: {
-    marginTop: 50
+    marginTop: 45
   },
   categoriesTitle: {
     color: appColors.fontColor,
