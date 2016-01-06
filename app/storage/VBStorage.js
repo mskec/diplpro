@@ -1,6 +1,8 @@
 'use strict';
 
 import _ from 'underscore';
+
+import HttpUtils from '../utils/HttpUtils';
 import Storage from './Storage';
 
 class VBStorage extends Storage {
@@ -14,14 +16,7 @@ class VBStorage extends Storage {
     return this.getCategories()
       .then((savedCategories) => {
         if (!savedCategories.length) {
-          // TODO API_URL constant, create some wrapper module for API calls
-          return fetch('https://staging.vibby.com/api/data/vibcategory', {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          })
-            .then((res) => res.json())
+          return HttpUtils.get('/api/data/vibcategory')
             .then((categories) => this.saveCategories(categories));
         }
       });
