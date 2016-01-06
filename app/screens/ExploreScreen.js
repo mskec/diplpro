@@ -5,13 +5,16 @@ import Slider from 'react-native-slider';
 import React from 'react-native';
 const {
   AppRegistry,
+  Image,
   StyleSheet,
   Text,
+  TouchableHighlight,
   View,
 } = React;
 
 import appColors from '../appColors';
 import {formatFreeTime} from '../utils/utils';
+import VBStorage from '../storage/VBStorage';
 
 
 class ExploreScreen extends React.Component {
@@ -26,6 +29,15 @@ class ExploreScreen extends React.Component {
     };
 
     this.onSliderChange = this.onSliderChange.bind(this);
+    this.onVibPress = this.onVibPress.bind(this);
+  }
+
+  componentDidMount() {
+    VBStorage.loadExplore()
+      .then(() => VBStorage.getExplore())
+      .then((vibs) => {
+        this.setState(Object.assign(this.state, {vibs}))
+      });
   }
 
   onSliderChange(value: Number) {
@@ -37,11 +49,15 @@ class ExploreScreen extends React.Component {
     this.setState(Object.assign(this.state, {freeTime}));
   }
 
+  onVibPress(vib: Object) {
+    console.log('onVibPress', vib);
+  }
+
   render() {
     return (
       <View style={styles.container}>
         {this.renderSlider()}
-        {this.renderVideos()}
+        {this.renderVibs(this.state.vibs)}
       </View>
     );
   }
@@ -69,27 +85,36 @@ class ExploreScreen extends React.Component {
     );
   }
 
-  renderVideos(videos: Array) {
-    const content = _.map(['a', 'b', 'c'], (video, idx) => this.renderVideo(video, idx));
-
+  renderVibs(vibs: Array) {
     return (
-      <View style={styles.videosContainer}>
-        <View style={styles.videosLabelContainer}>
-          <Text style={styles.videosLabel}>Recommended videos</Text>
-          <Text style={[styles.videosLabel, styles.videosPlayAll]}>Play all</Text>
+      <View style={styles.vibsContainer}>
+        <View style={styles.vibsLabelContainer}>
+          <Text style={styles.vibsLabel}>Recommended videos</Text>
+          <Text style={[styles.vibsLabel, styles.vibsPlayAll]}>Play all</Text>
         </View>
 
-        <View style={styles.videos}>
-          {content}
+        <View style={styles.vibs}>
+          {_.map(vibs, (vib, idx) => this.renderVib(vib, idx))}
         </View>
       </View>
     );
   }
 
-  renderVideo(video: Object, idx: Number) {
+  renderVib(vib: Object, idx: Number) {
     return (
-      <View style={styles.videoContainer} key={idx}>
-        <Text>{idx}. video</Text>
+      <View style={styles.vibContainer} key={vib._id}>
+        <TouchableHighlight onPress={() => this.onVibPress(vib)}>
+          <View>
+            <Image
+              style={styles.vibThumbnail}
+              source={{uri: vib.video.metadata.thumbnail}}
+            />
+
+            <View style={styles.vibMetadataContainer}>
+
+            </View>
+          </View>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -98,7 +123,7 @@ class ExploreScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 30
+    margin: 10
   },
 
   sliderContainer: {
@@ -122,26 +147,36 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
 
-  videosContainer: {
+  vibsContainer: {
     marginTop: 30
   },
-  videosLabelContainer: {
+  vibsLabelContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end'
   },
-  videosLabel: {
+  vibsLabel: {
     color: appColors.fontColor,
     fontSize: 18
   },
-  videosPlayAll: {
+  vibsPlayAll: {
     fontSize: 12
   },
-  videos: {
-
+  vibs: {
+    marginTop: 10
   },
-  videoContainer: {
-
+  vibContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    marginBottom: 15
+  },
+  vibThumbnail: {
+    backgroundColor: '#DDD',
+    height: 81,
+    width: 148
+  },
+  vibMetadataContainer: {
+    flex: 1
   }
 
 });

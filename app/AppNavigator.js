@@ -4,6 +4,7 @@ import React from 'react-native';
 const {
   AppRegistry,
   Navigator,
+  ScrollView,
   StyleSheet,
   Text,
   View
@@ -31,8 +32,10 @@ const RouteMapper = (route, navigator) => {
 
   return (
     <View style={styles.screenWrapper}>
-      {screen}
-      <DebugTools />
+      <ScrollView>
+        {screen}
+        <DebugTools />
+      </ScrollView>
     </View>
   );
 };

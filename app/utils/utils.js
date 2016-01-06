@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 
 export function formatFreeTime(time: Number) {
   const MAX_TIME = 10; // minutes
@@ -12,4 +13,14 @@ export function formatFreeTime(time: Number) {
   label += seconds > 1 ? ` ${seconds} sec` : '';
 
   return label;
+}
+
+export function calculateVibDuration(vib: Object) {
+  let duration = 0;
+
+  _.each(vib.impacts, (impact) => {
+    duration += (impact.endSec - impact.startSec);
+  });
+
+  return duration;
 }

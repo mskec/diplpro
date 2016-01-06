@@ -4,6 +4,7 @@ import _ from 'underscore';
 
 import HttpUtils from '../utils/HttpUtils';
 import Storage from './Storage';
+import {calculateVibDuration} from '../utils/utils';
 
 class VBStorage extends Storage {
   constructor() {
@@ -18,12 +19,21 @@ class VBStorage extends Storage {
             .then(() => this.getCategories());
         }
 
-        return this.parseCategories(categoriesJSON);
+        const categories = JSON.parse(categoriesJSON);
+        return Promise.all(_.map(categories, (categoryId) => this.getCategory(categoryId)));
       });
   }
 
-  getCategory(id) {
-    return super.getItem(`categories.${id}`);
+  getCategory(id: String) {
+    return super.getItem(`categories.${id}`)
+      .then((categoryJSON) => {
+        let category;
+        if (categoryJSON) {
+          category = JSON.parse(categoryJSON);
+        }
+
+        return category;
+      });
   }
 
   loadCategories() {
@@ -39,14 +49,43 @@ class VBStorage extends Storage {
       });
   }
 
-  parseCategories(categoriesJSON: String) {
-    const categories = JSON.parse(categoriesJSON);
 
-    return Promise.all(_.map(categories, (categoryId) => this.getCategory(categoryId)))
-      .then((categories) => {
-        return _.map(categories, (categoryJSON) => JSON.parse(categoryJSON));
+  getExplore() {
+    return super.getItem('explore')
+      .then((vibsJSON) => {
+        let vibs = vibsJSON ? JSON.parse(vibsJSON) : [];
+
+        return Promise.all(_.map(vibs, (vibId) => this.getVib(vibId)));
       });
   }
+
+  getVib(id: String) {
+    return super.getItem(`vibs.${id}`)
+      .then((vibJSON) => {
+        return vibJSON ? JSON.parse(vibJSON) : vibJSON;
+      });
+  }
+
+  loadExplore() {
+    return HttpUtils.get('/api/data/story/explore?count=5')
+      .then((vibs) => {
+        const vibIds = [];
+
+        _.each(vibs, (vib) => {
+          vibIds.push(vib._id);
+          vib.duration = calculateVibDuration(vib);
+          delete vib.vibCategory;
+          delete vib.impacts;
+          delete vib.upvoters;
+        });
+
+        return Promise.all(
+          super.setItem('explore', JSON.stringify(vibIds)),
+          super.multiSet(_.map(vibs, (vib) => [`vibs.${vib._id}`, JSON.stringify(vib)]))
+        );
+      });
+  }
+
 }
 
 export default new VBStorage;
