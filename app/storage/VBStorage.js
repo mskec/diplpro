@@ -67,7 +67,7 @@ class VBStorage extends Storage {
   }
 
   loadExplore() {
-    return HttpUtils.get('/api/data/story/explore?count=5')
+    return HttpUtils.get('/api/data/story/explore')
       .then((vibs) => {
         const vibIds = [];
 

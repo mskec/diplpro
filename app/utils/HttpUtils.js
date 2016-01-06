@@ -1,16 +1,16 @@
 'use strict';
 
+import AppConstants from '../AppConstants';
+
 const JSON_HEADERS = {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
 };
 
-const API_URL = 'https://staging.vibby.com';
-
 
 class HttpUtils {
   get(path) {
-    return fetch(API_URL + path, {method: 'GET', headers: JSON_HEADERS})
+    return fetch(AppConstants.API_URL + path, {method: 'GET', headers: JSON_HEADERS})
       .then((res) => res.json())
       .catch((err) => this.errorHandler(err));
   }

@@ -4,15 +4,18 @@ import React from 'react-native';
 const {
   AppRegistry,
   StyleSheet,
+  View,
   WebView
 } = React;
+
+import AppConstants from '../AppConstants';
+import Button from '../Button';
+import {generateVibEmbedUrl} from '../utils/utils';
 
 
 class WatchScreen extends React.Component {
   constructor() {
     super();
-
-    this.state = {url: 'https://staging.vibby.com/embed/?vib=XyG_eq0Ttg'};
 
     this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
   }
@@ -25,20 +28,27 @@ class WatchScreen extends React.Component {
   render() {
     console.log('watch|render');
     return (
-      <WebView
-        style={styles.webView}
-        url={this.state.url}
-        onNavigationStateChange={this.onNavigationStateChange}
-        allowsInlineMediaPlayback={true}
-        javaScriptEnabled={true}
-      />
+      <View style={styles.container}>
+        <WebView
+          style={styles.webView}
+          url={generateVibEmbedUrl(this.props.vib)}
+          onNavigationStateChange={this.onNavigationStateChange}
+          allowsInlineMediaPlayback={true}
+          javaScriptEnabled={true}
+        />
+
+        <Button onPress={() => this.props.navigator.pop()} text="Done" />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  webView: {
+  container: {
     flex: 1
+  },
+  webView: {
+
   }
 });
 

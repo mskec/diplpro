@@ -12,8 +12,8 @@ const {
   View,
 } = React;
 
-import appColors from '../appColors';
-import {formatFreeTime} from '../utils/utils';
+import {appColors} from '../AppConstants';
+import {formatFreeTime, formatDuration} from '../utils/utils';
 import VBStorage from '../storage/VBStorage';
 
 
@@ -50,7 +50,7 @@ class ExploreScreen extends React.Component {
   }
 
   onVibPress(vib: Object) {
-    console.log('onVibPress', vib);
+    this.props.navigator.push({name: 'Watch', vib});
   }
 
   render() {
@@ -104,14 +104,15 @@ class ExploreScreen extends React.Component {
     return (
       <View style={s.vibContainer} key={vib._id}>
         <TouchableHighlight onPress={() => this.onVibPress(vib)}>
-          <View>
+          <View style={s.vibWrapper}>
             <Image
               style={s.vibThumbnail}
               source={{uri: vib.video.metadata.thumbnail}}
             />
 
             <View style={s.vibMetadataContainer}>
-
+              <Text style={s.vibTitle}>{vib.title.substr(0, 60)}</Text>
+              <Text style={s.vibDuration}>{formatDuration(vib.duration)}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -146,7 +147,7 @@ const sliderStyles = {
 
 const vibsStyles = {
   vibsContainer: {
-    marginTop: 30
+    marginTop: 20
   },
   vibsLabelContainer: {
     flexDirection: 'row',
@@ -161,20 +162,38 @@ const vibsStyles = {
     fontSize: 12
   },
   vibs: {
-    marginTop: 10
+    marginTop: 15
   },
+
   vibContainer: {
-    flexDirection: 'row',
     backgroundColor: '#FFF',
     marginBottom: 15
   },
+  vibWrapper: {
+    flexDirection: 'row'
+  },
   vibThumbnail: {
     backgroundColor: '#DDD',
-    height: 81,
-    width: 148
+    height: 90,
+    width: 160
   },
   vibMetadataContainer: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    padding: 10,
+    height: 90,
+    width: 1    // for some reason this is necessary to make width 100%
+  },
+  vibTitle: {
+    color: appColors.fontGrey,
+    fontSize: 14
+  },
+  vibDuration: {
+    color: appColors.fontGrey,
+    fontSize: 12
   }
 };
 

@@ -3,6 +3,7 @@
 import React from 'react-native';
 const {
   AppRegistry,
+  BackAndroid,
   Navigator,
   ScrollView,
   StyleSheet,
@@ -10,7 +11,7 @@ const {
   View
 } = React;
 
-import appColors from './appColors';
+import {appColors} from './AppConstants';
 import AppStorage from './storage/AppStorage';
 import ExploreScreen from './screens/ExploreScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -18,34 +19,18 @@ import WatchScreen from './screens/WatchScreen';
 import DebugTools from './utils/DebugTools';
 
 
-const RouteMapper = (route, navigator) => {
-  const routes = {
-    Welcome: <WelcomeScreen navigator={navigator} />,
-    Explore: <ExploreScreen navigator={navigator} />,
-    Watch:   <WatchScreen navigator={navigator} />
-  };
-
-  const screen = routes[route.name];
-  if (!screen) {
-    return console.error('Unhandled route!', route);
-  }
-
-  return (
-    <View style={styles.screenWrapper}>
-      <ScrollView>
-        {screen}
-        <DebugTools />
-      </ScrollView>
-    </View>
-  );
-};
-
-
 class AppNavigator extends React.Component {
   constructor() {
     super();
 
+    this.route = {};
     this.state = {initialRoute: {}};
+
+    this.onRouteChange = this.onRouteChange.bind(this);
+    this.onBackAndroid = this.onBackAndroid.bind(this);
+    this.isOnMainScreen = this.isOnMainScreen.bind(this);
+
+    BackAndroid.addEventListener('hardwareBackPress', () => this.onBackAndroid());
   }
 
   componentDidMount() {
@@ -56,12 +41,51 @@ class AppNavigator extends React.Component {
       });
   }
 
+  onRouteChange(route: Object, navigator: Object) {
+    const routes = {
+      Welcome: <WelcomeScreen navigator={navigator} />,
+      Explore: <ExploreScreen navigator={navigator} />,
+      Watch:   <WatchScreen navigator={navigator} vib={route.vib} />
+    };
+
+    let screen = routes[route.name];
+    if (!screen) {
+      return console.error('Unhandled route!', route);
+    }
+
+    if (route.name === 'Explore') {
+      screen = <ScrollView>{screen}</ScrollView>;
+    }
+
+    this.route = route;
+    return (
+      <View style={styles.screenWrapper}>
+        {screen}
+
+      </View>
+    );
+  }
+
+  onBackAndroid() {
+    if (!this.isOnMainScreen()) {
+      this.refs.navigator.pop();
+      return true;
+    }
+
+    return false;
+  }
+
+  isOnMainScreen() {
+    return this.route.name === 'Explore';
+  }
+
   render() {
     return this.state.initialRoute.name ?
       <Navigator
+        ref="navigator"
         style={styles.container}
         initialRoute={this.state.initialRoute}
-        renderScene={RouteMapper}
+        renderScene={this.onRouteChange}
       /> :
       this.renderLoading();
   }

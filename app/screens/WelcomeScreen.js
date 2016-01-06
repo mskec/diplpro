@@ -13,7 +13,7 @@ const {
 } = React;
 
 import Alert from '../Alert';
-import appColors from '../appColors';
+import {appColors} from '../AppConstants';
 import AppStorage from '../storage/AppStorage';
 import VBStorage from '../storage/VBStorage';
 
@@ -112,12 +112,11 @@ class WelcomeScreen extends React.Component {
   }
 
   renderCategories(categories: Array) {
-    const content = _.map(categories, (category, idx) => this.renderCategory(category, idx));
     return (
     <View style={s.categoriesContainer}>
       <Text style={s.categoriesTitle}>Pick categories</Text>
       <View style={s.categories}>
-        {content}
+        {_.map(categories, (category, idx) => this.renderCategory(category, idx))}
       </View>
     </View>
     );
