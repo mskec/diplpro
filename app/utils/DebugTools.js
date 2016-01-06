@@ -1,21 +1,52 @@
 'use strict';
 
+import _ from 'underscore';
 import React from 'react-native';
 const {
   AppRegistry,
   AsyncStorage,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } = React;
 
+
 class DebugTools extends React.Component {
+  constructor() {
+    super();
+
+    this.onClearStorage = this.onClearStorage.bind(this);
+    this.onLogStorage = this.onLogStorage.bind(this);
+  }
+
+  onClearStorage() {
+    AsyncStorage.clear();
+  }
+
+  onLogStorage() {
+    AsyncStorage.getAllKeys()
+      .then((keys) => {
+        console.log('Storage keys', keys);
+
+        return AsyncStorage.multiGet(keys);
+      })
+      .then((keyValueArray) => {
+        _.forEach(keyValueArray, (keyValue) => console.log(keyValue[0], keyValue[1]))
+      });
+  }
 
   render() {
     return (
-      <TouchableOpacity style={styles.container} onPress={() => AsyncStorage.clear()}>
-        <Text style={{color: '#FFF'}}>Clear storage</Text>
-      </TouchableOpacity>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.item} onPress={() => this.onClearStorage()}>
+          <Text style={{color: '#FFF'}}>Clear storage</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.item} onPress={() => this.onLogStorage()}>
+          <Text style={{color: '#FFF'}}>Log storage</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -23,8 +54,14 @@ class DebugTools extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 10,
-    marginRight: 10
+    margin: 10,
+    flexDirection: 'row'
+  },
+  item: {
+    marginRight: 5,
+    backgroundColor: '#F44336',
+    borderRadius: 5,
+    padding: 5
   }
 });
 

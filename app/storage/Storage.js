@@ -32,25 +32,3 @@ class Storage {
 }
 
 export default Storage;
-
-
-// Storage helper functions
-
-function clearStorage() {
-  AsyncStorage.clear();
-}
-
-function printStorage() {
-  AsyncStorage.getAllKeys()
-    .then((keys) => {
-      console.log('Storage keys', keys);
-
-      return AsyncStorage.multiGet(keys);
-    })
-    .then((keyValueArray) => {
-      _.forEach(keyValueArray, (keyValue) => console.log(keyValue[0], keyValue[1]))
-    });
-}
-
-//clearStorage();
-//printStorage();

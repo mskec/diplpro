@@ -32,9 +32,9 @@ class VBStorage extends Storage {
   }
 
   saveCategories(categories: Array) {
-    return super.multiSet(_.map(categories, (category) => [`categories.${category.shortId}`, JSON.stringify(category)]))
+    return super.multiSet(_.map(categories, (category) => [`categories.${category._id}`, JSON.stringify(category)]))
       .then(() => {
-        const categoriesJSON = JSON.stringify(_.map(categories, (category) => category.shortId));
+        const categoriesJSON = JSON.stringify(_.map(categories, (category) => category._id));
         return super.setItem('categories', categoriesJSON);
       });
   }

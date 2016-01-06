@@ -30,7 +30,7 @@ const RouteMapper = (route, navigator) => {
   }
 
   return (
-    <View>
+    <View style={styles.screenWrapper}>
       {screen}
       <DebugTools />
     </View>
@@ -85,6 +85,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: '#fff'
+  },
+  screenWrapper: {
+    flex: 1,
+    justifyContent: 'space-between'
   }
 });
 

@@ -1,5 +1,7 @@
 'use strict';
 
+import _ from 'underscore';
+
 import Storage from './Storage';
 
 
@@ -20,7 +22,7 @@ class AppStorage extends Storage {
       name: () => super.getItem('user.name'),
 
       setCategories: (categories) => {
-        return super.setItem('user.categories', JSON.stringify(categories.map((category) => category.shortId)));
+        return super.setItem('user.categories', JSON.stringify(_.map(categories, (category) => category._id)));
       }
     };
   }
