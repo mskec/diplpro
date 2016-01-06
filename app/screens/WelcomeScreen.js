@@ -74,7 +74,7 @@ class WelcomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={s.container}>
         {this.renderTitle()}
 
         {this.renderName()}
@@ -88,8 +88,8 @@ class WelcomeScreen extends React.Component {
 
   renderTitle() {
     return (
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>
+      <View style={s.titleContainer}>
+        <Text style={s.title}>
           Welcome
         </Text>
       </View>
@@ -98,12 +98,12 @@ class WelcomeScreen extends React.Component {
 
   renderName() {
     return (
-      <View style={styles.nameContainer}>
-        <Text style={styles.name}>
+      <View style={s.nameContainer}>
+        <Text style={s.name}>
           Enter your name
         </Text>
         <TextInput
-          style={styles.nameInput}
+          style={s.nameInput}
           onChangeText={this.onNameChange}
           value={this.state.name}
         />
@@ -114,9 +114,9 @@ class WelcomeScreen extends React.Component {
   renderCategories(categories: Array) {
     const content = _.map(categories, (category, idx) => this.renderCategory(category, idx));
     return (
-    <View style={styles.categoriesContainer}>
-      <Text style={styles.categoriesTitle}>Pick categories</Text>
-      <View style={styles.categories}>
+    <View style={s.categoriesContainer}>
+      <Text style={s.categoriesTitle}>Pick categories</Text>
+      <View style={s.categories}>
         {content}
       </View>
     </View>
@@ -128,9 +128,9 @@ class WelcomeScreen extends React.Component {
       <TouchableOpacity
         key={idx}
         onPress={() => this.onCategoryPress(category)}
-        style={[styles.category, category._selected && styles.categorySelected]}
+        style={[s.category, category._selected && s.categorySelected]}
       >
-        <Text style={[styles.categoryText, category._selected && styles.categoryTextSelected]}>
+        <Text style={[s.categoryText, category._selected && s.categoryTextSelected]}>
           {category.label}
         </Text>
       </TouchableOpacity>
@@ -139,9 +139,9 @@ class WelcomeScreen extends React.Component {
 
   renderNext() {
     return (
-      <View style={styles.nextContainer}>
-        <TouchableOpacity style={styles.next} onPress={() => this.onNextPress()}>
-          <Text style={styles.nextText}>Next</Text>
+      <View style={s.nextContainer}>
+        <TouchableOpacity style={s.next} onPress={() => this.onNextPress()}>
+          <Text style={s.nextText}>Next</Text>
         </TouchableOpacity>
       </View>
     );
@@ -149,12 +149,12 @@ class WelcomeScreen extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
+
+const screenStyles = {
   container: {
     flex: 1,
     margin: 30
   },
-
   titleContainer: {
     marginTop: Platform.OS === 'ios' ? 65 : 30,
     justifyContent: 'center',
@@ -163,8 +163,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 48,
     color: '#FFF'
-  },
+  }
+};
 
+const nameStyles = {
   nameContainer: {
     marginTop: Platform.OS === 'ios' ? 75 : 45,
     alignItems: 'flex-start'
@@ -184,8 +186,10 @@ const styles = StyleSheet.create({
     color: appColors.fontColor,
     fontSize: 20,
     marginBottom: 15
-  },
+  }
+};
 
+const categoriesStyles = {
   categoriesContainer: {
     marginTop: 45
   },
@@ -228,8 +232,10 @@ const styles = StyleSheet.create({
   },
   categoryTextSelected: {
     color: appColors.fontColor
-  },
+  }
+};
 
+const nextStyles = {
   nextContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -248,7 +254,9 @@ const styles = StyleSheet.create({
     color: appColors.fontColor,
     fontSize: 16
   }
-});
+};
+
+const s = StyleSheet.create(Object.assign({}, screenStyles, nameStyles, categoriesStyles, nextStyles));
 
 AppRegistry.registerComponent('WelcomeScreen', () => WelcomeScreen);
 

@@ -55,7 +55,7 @@ class ExploreScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={s.container}>
         {this.renderSlider()}
         {this.renderVibs(this.state.vibs)}
       </View>
@@ -64,12 +64,12 @@ class ExploreScreen extends React.Component {
 
   renderSlider() {
     return (
-      <View style={styles.sliderContainer}>
-        <View style={styles.sliderLabelContainer}>
-          <Text style={styles.sliderLabel}>
+      <View style={s.sliderContainer}>
+        <View style={s.sliderLabelContainer}>
+          <Text style={s.sliderLabel}>
             Your free time
           </Text>
-          <Text style={styles.sliderLabel}>
+          <Text style={s.sliderLabel}>
             {this.state.freeTime.label}
           </Text>
         </View>
@@ -78,8 +78,8 @@ class ExploreScreen extends React.Component {
           onValueChange={(value) => this.onSliderChange(value)}
           minimumTrackTintColor={appColors.fontColor}
           maximumTrackTintColor="#FFF"
-          trackStyle={styles.sliderTrack}
-          thumbStyle={styles.sliderThumb}
+          trackStyle={s.sliderTrack}
+          thumbStyle={s.sliderThumb}
         />
       </View>
     );
@@ -87,13 +87,13 @@ class ExploreScreen extends React.Component {
 
   renderVibs(vibs: Array) {
     return (
-      <View style={styles.vibsContainer}>
-        <View style={styles.vibsLabelContainer}>
-          <Text style={styles.vibsLabel}>Recommended videos</Text>
-          <Text style={[styles.vibsLabel, styles.vibsPlayAll]}>Play all</Text>
+      <View style={s.vibsContainer}>
+        <View style={s.vibsLabelContainer}>
+          <Text style={s.vibsLabel}>Recommended videos</Text>
+          <Text style={[s.vibsLabel, s.vibsPlayAll]}>Play all</Text>
         </View>
 
-        <View style={styles.vibs}>
+        <View style={s.vibs}>
           {_.map(vibs, (vib, idx) => this.renderVib(vib, idx))}
         </View>
       </View>
@@ -102,15 +102,15 @@ class ExploreScreen extends React.Component {
 
   renderVib(vib: Object, idx: Number) {
     return (
-      <View style={styles.vibContainer} key={vib._id}>
+      <View style={s.vibContainer} key={vib._id}>
         <TouchableHighlight onPress={() => this.onVibPress(vib)}>
           <View>
             <Image
-              style={styles.vibThumbnail}
+              style={s.vibThumbnail}
               source={{uri: vib.video.metadata.thumbnail}}
             />
 
-            <View style={styles.vibMetadataContainer}>
+            <View style={s.vibMetadataContainer}>
 
             </View>
           </View>
@@ -121,11 +121,7 @@ class ExploreScreen extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
-  container: {
-    margin: 10
-  },
-
+const sliderStyles = {
   sliderContainer: {
     marginTop: 20,
     justifyContent: 'center'
@@ -145,8 +141,10 @@ const styles = StyleSheet.create({
   sliderLabel: {
     color: appColors.fontColor,
     fontSize: 16
-  },
+  }
+};
 
+const vibsStyles = {
   vibsContainer: {
     marginTop: 30
   },
@@ -178,8 +176,15 @@ const styles = StyleSheet.create({
   vibMetadataContainer: {
     flex: 1
   }
+};
 
-});
+const screenStyles = {
+  container: {
+    margin: 10
+  }
+};
+
+const s = StyleSheet.create(Object.assign({}, screenStyles, sliderStyles, vibsStyles));
 
 AppRegistry.registerComponent('ExploreScreen', () => ExploreScreen);
 
