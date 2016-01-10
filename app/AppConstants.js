@@ -2,6 +2,7 @@
 
 export const appColors = {
   background: '#2A2B33',
+  backgroundLighter: '#40424F',
   fontColor: '#57A6FF',
   fontGrey: '#7C7F98',
   borderBluish: '#D3D7FD',
