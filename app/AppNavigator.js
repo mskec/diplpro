@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React from 'react-native';
 const {
   AppRegistry,
@@ -61,7 +62,7 @@ class AppNavigator extends React.Component {
       return console.error('Unhandled route!', route);
     }
 
-    if (route.name === 'Explore') {
+    if (_.contains(['Explore', 'Settings'], route.name)) {
       screen = <ScrollView>{screen}</ScrollView>;
     }
 
@@ -93,8 +94,7 @@ class AppNavigator extends React.Component {
     },
 
     RightButton: function(route, navigator, index, navState) {
-      // TODO: for some reason this is called for every route in route stack and invisible 'Settings' button is clickable
-      if (route.name === 'Settings') {
+      if (navState.routeStack.length > 1 || navState.routeStack[0].name !== 'Explore') {
         return null;
       }
 

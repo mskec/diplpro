@@ -9,7 +9,7 @@ const {
 
 
 class Alert {
-  show(message) {
+  static show(message) {
     Platform.OS === 'ios' && AlertIOS.alert(message);
     Platform.OS === 'android' && ToastAndroid.show(message, ToastAndroid.SHORT);
   }

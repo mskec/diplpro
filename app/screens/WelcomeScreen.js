@@ -50,16 +50,16 @@ class WelcomeScreen extends React.Component {
   }
 
   onNextPress() {
-    const nameValid = this.state.name && /^\w+$/.test(this.state.name);
+    const nameValid = this.state.name && /^\w+$/.test(this.state.name.trim());
     const selectedCategories = _.filter(this.state.categories, category => category._selected);
 
     if (!nameValid || selectedCategories.length === 0) {
       let message = !nameValid ? 'Enter your name!\n' : '';
-      message += selectedCategories.length === 0 ? 'Select at least one category' : '';
+      message += selectedCategories.length === 0 ? 'Select at least one category!' : '';
       return Alert.show(message.trim());
     }
 
-    AppStorage.user().setName(this.state.name);
+    AppStorage.user().setName(this.state.name.trim());
     AppStorage.user().setCategories(selectedCategories);
     AppStorage.state('welcomeShown', 'true');
 
@@ -70,23 +70,11 @@ class WelcomeScreen extends React.Component {
   render() {
     return (
       <View style={s.container}>
-        {this.renderTitle()}
-
         {this.renderName()}
 
         {this.renderCategories(this.state.categories)}
 
         {this.renderNext()}
-      </View>
-    );
-  }
-
-  renderTitle() {
-    return (
-      <View style={s.titleContainer}>
-        <Text style={s.title}>
-          Welcome
-        </Text>
       </View>
     );
   }
@@ -146,21 +134,12 @@ const screenStyles = {
   container: {
     flex: 1,
     margin: 30
-  },
-  titleContainer: {
-    marginTop: Platform.OS === 'ios' ? 65 : 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: 48,
-    color: '#FFF'
   }
 };
 
 const nameStyles = {
   nameContainer: {
-    marginTop: Platform.OS === 'ios' ? 75 : 45,
+    marginTop: 45,
     alignItems: 'flex-start'
   },
   nameInput: {

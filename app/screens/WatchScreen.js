@@ -9,7 +9,6 @@ const {
 } = React;
 
 import AppConstants from '../AppConstants';
-import Button from '../Button';
 import {generateVibEmbedUrl} from '../utils/utils';
 
 
@@ -36,8 +35,6 @@ class WatchScreen extends React.Component {
           allowsInlineMediaPlayback={true}
           javaScriptEnabled={true}
         />
-
-        <Button onPress={() => this.props.navigator.pop()} text="Done" />
       </View>
     );
   }
