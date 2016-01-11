@@ -23,6 +23,12 @@ class AppStorage extends Storage {
 
       setCategories: (categories) => {
         return super.setItem('user.categories', JSON.stringify(_.map(categories, (category) => category._id)));
+      },
+      categories: () => {
+        return super.getItem('user.categories')
+          .then((categoriesJSON) => {
+            return categoriesJSON ? JSON.parse(categoriesJSON) : [];
+          });
       }
     };
   }

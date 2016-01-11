@@ -37,11 +37,6 @@ class WelcomeScreen extends React.Component {
       .then((categories) => {
         this.setState(Object.assign(this.state, {categories}));
       });
-
-    AppStorage.getItem('user.name')
-      .then((username) => {
-        this.setState(Object.assign(this.state, {name: username}));
-      });
   }
 
   onNameChange(name: String) {
@@ -99,9 +94,7 @@ class WelcomeScreen extends React.Component {
   renderName() {
     return (
       <View style={s.nameContainer}>
-        <Text style={s.name}>
-          Enter your name
-        </Text>
+        <Text style={s.name}>Enter your name</Text>
         <TextInput
           style={s.nameInput}
           onChangeText={this.onNameChange}
