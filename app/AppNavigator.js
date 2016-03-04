@@ -67,10 +67,10 @@ class AppNavigator extends React.Component {
     }
 
     this.route = route;
+        //<DebugTools />
     return (
       <View style={s.screenWrapper}>
         {screen}
-        <DebugTools />
       </View>
     );
   }

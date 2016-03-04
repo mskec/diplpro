@@ -30,7 +30,7 @@ class WatchScreen extends React.Component {
       <View style={styles.container}>
         <WebView
           style={styles.webView}
-          url={generateVibEmbedUrl(this.props.vib)}
+          source={{uri: generateVibEmbedUrl(this.props.vib)}}
           onNavigationStateChange={this.onNavigationStateChange}
           allowsInlineMediaPlayback={true}
           javaScriptEnabled={true}
