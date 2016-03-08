@@ -36,5 +36,5 @@ export function calculateVibDuration(vib: Object) {
 }
 
 export function generateVibEmbedUrl(vib: Object) {
-  return `${AppConstants.API_URL}/embed?vib=${vib.shortId}`;
+  return `${AppConstants.API_URL}/embed/vib?vib=${vib.shortId}`;
 }

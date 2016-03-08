@@ -10,5 +10,5 @@ export const appColors = {
 };
 
 export default {
-  API_URL: 'https://staging.vibby.com'
+  API_URL: 'https://www.vibby.com'
 }
