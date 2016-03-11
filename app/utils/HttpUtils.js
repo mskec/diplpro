@@ -8,17 +8,15 @@ const JSON_HEADERS = {
 };
 
 
-class HttpUtils {
-  get(path) {
+export default class HttpUtils {
+  static get(path) {
     return fetch(AppConstants.API_URL + path, {method: 'GET', headers: JSON_HEADERS})
       .then((res) => res.json())
-      .catch((err) => this.errorHandler(err));
+      .catch((err) => HttpUtils.errorHandler(err));
   }
 
-  errorHandler(err) {
+  static errorHandler(err) {
     console.error(err);
     return err;
   }
 }
-
-export default new HttpUtils;

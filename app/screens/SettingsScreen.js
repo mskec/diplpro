@@ -4,15 +4,14 @@ import _ from 'underscore';
 import React from 'react-native';
 const {
   AppRegistry,
-  Platform,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View
 } = React;
 
+import Alert from '../Alert';
 import Button from '../Button';
 import {appColors} from '../AppConstants';
 import AppStorage from '../storage/AppStorage';
@@ -26,14 +25,11 @@ class SettingsScreen extends React.Component {
 
     this.state = {
       name: '',
-      categories: [],
-      downloadOnWifi: false
+      categories: []
     };
 
     this.onNameChange = this.onNameChange.bind(this);
     this.onCategoryPress = this.onCategoryPress.bind(this);
-    this.onDownloadOnWifiChange = this.onDownloadOnWifiChange.bind(this);
-    this.onMarkLocation = this.onMarkLocation.bind(this);
     this.onSave = this.onSave.bind(this);
   }
 
@@ -53,13 +49,13 @@ class SettingsScreen extends React.Component {
       });
 
     AppStorage.user().name()
-      .then((username) => {
-        this.setState(Object.assign(this.state, {name: username}));
+      .then((name) => {
+        this.setState(Object.assign(this.state, {name}));
       });
   }
 
   onNameChange(name: String) {
-    this.setState(Object.assign(this.state, {name: name}));
+    this.setState(Object.assign(this.state, {name}));
   }
 
   onCategoryPress(category: Object) {
@@ -68,18 +64,18 @@ class SettingsScreen extends React.Component {
     this.forceUpdate();
   }
 
-  onDownloadOnWifiChange(value: Boolean) {
-    console.log('onDownloadOnWifiChange', value);
-
-    this.setState(Object.assign(this.state, {downloadOnWifi: value}));
-  }
-
-  onMarkLocation() {
-    console.log('onMarkLocation');
-  }
-
   onSave() {
-    console.log('onSave');
+    const nameValid = this.state.name && /^\w+$/.test(this.state.name.trim());
+    if (nameValid) {
+      AppStorage.user().setName(this.state.name.trim());
+    }
+
+    const selectedCategories = _.filter(this.state.categories, category => category._selected);
+    if (selectedCategories.length > 0) {
+      AppStorage.user().setCategories(selectedCategories);
+    }
+
+    Alert.show('Saved!');
   }
 
   render() {
@@ -88,8 +84,6 @@ class SettingsScreen extends React.Component {
         {this.renderName()}
 
         {this.renderCategories(this.state.categories)}
-
-        {this.renderOptions()}
 
         {this.renderSave()}
       </View>
@@ -131,46 +125,6 @@ class SettingsScreen extends React.Component {
           {category.label}
         </Text>
       </TouchableOpacity>
-    );
-  }
-
-  renderOptions() {
-    return (
-      <View style={s.optionsContainer}>
-        <Text style={s.title}>Options</Text>
-
-        {this.renderSwitch(
-          'Download videos when on WiFi',
-          this.state.downloadOnWifi,
-          this.onDownloadOnWifiChange
-        )}
-
-        <View style={s.optionContainer}>
-          <Text style={s.optionLabel}>
-            Mark current location as home
-          </Text>
-          <Button
-            onPress={() => this.onMarkLocation()}
-            text="Mark"
-            textStyle={buttonStyles.text}
-            wrapperStyle={buttonStyles.wrapper}
-          />
-        </View>
-      </View>
-    );
-  }
-
-  renderSwitch(label: String, value: Boolean, onValueChange) {
-    return (
-      <View style={s.optionContainer}>
-        <Text style={s.optionLabel}>{label}</Text>
-        <Switch
-          onValueChange={(val) => onValueChange(val)}
-          value={value}
-          onTintColor={appColors.fontColor}
-          style={s.switchControl}
-        />
-      </View>
     );
   }
 
@@ -280,40 +234,7 @@ const categoriesStyles = {
   }
 };
 
-const optionsStyles = {
-  optionsContainer: {
-    marginTop: 25
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  optionLabel: {
-    color: '#FFF',
-    fontSize: 16,
-    justifyContent: 'center'
-  },
-  switchControl: {
-    // Placeholder
-  },
-  markButtonWrapper: {
-    borderWidth: 1,
-    borderColor: appColors.borderGrey
-  },
-  markButtonText: {
-    color: appColors.fontColor,
-    fontSize: 16
-  }
-};
-
-if (Platform.OS === 'android') {
-  Object.assign(optionsStyles.switchControl, {width: 45});
-}
-
-
-const s = StyleSheet.create(Object.assign({}, screenStyles, nameStyles, categoriesStyles, optionsStyles));
+const s = StyleSheet.create(Object.assign({}, screenStyles, nameStyles, categoriesStyles));
 
 AppRegistry.registerComponent('SettingsScreen', () => SettingsScreen);
 

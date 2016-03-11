@@ -8,11 +8,9 @@ const {
 } = React;
 
 
-class Alert {
+export default class Alert {
   static show(message) {
     Platform.OS === 'ios' && AlertIOS.alert(message);
     Platform.OS === 'android' && ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 }
-
-export default new Alert;
