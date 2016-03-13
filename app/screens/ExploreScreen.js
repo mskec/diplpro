@@ -32,7 +32,7 @@ class ExploreScreen extends React.Component {
   }
 
   componentDidMount() {
-    VBStorage.loadExplore();
+    //
   }
 
   onVibPress(vib: Object) {
@@ -120,7 +120,7 @@ const vibsStyles = {
 
   },
   vibs: {
-    marginBottom: Platform.OS === 'ios' ? -40 : 0
+    marginBottom: Platform.OS === 'ios' ? -35 : 10
   },
 
   vibContainer: {

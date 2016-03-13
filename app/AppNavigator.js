@@ -4,6 +4,7 @@ import _ from 'underscore';
 import React from 'react-native';
 const {
   AppRegistry,
+  AppState,
   BackAndroid,
   Navigator,
   Platform,
@@ -15,7 +16,7 @@ const {
 } = React;
 
 import {appColors} from './AppConstants';
-import AppStorage from './storage/AppStorage';
+import ExploreService from './services/ExploreService';
 import ExploreScreen from './screens/ExploreScreen';
 import WatchScreen from './screens/WatchScreen';
 import DebugTools from './utils/DebugTools';
@@ -26,13 +27,17 @@ class AppNavigator extends React.Component {
     super();
 
     this.route = {};
-    this.state = {initialRoute: {name: 'Explore'}};
+    this.state = {
+      isLoading: false,
+      initialRoute: {name: 'Explore'}
+    };
 
     this.onRouteChange = this.onRouteChange.bind(this);
     this.onBackAndroid = this.onBackAndroid.bind(this);
-    this.isOnMainScreen = this.isOnMainScreen.bind(this);
+    this.onAppStateChange = this.onAppStateChange.bind(this);
 
-    BackAndroid.addEventListener('hardwareBackPress', () => this.onBackAndroid());
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+    AppState.addEventListener('change', this.onAppStateChange)
   }
 
   componentDidMount() {
@@ -103,7 +108,7 @@ class AppNavigator extends React.Component {
   };
 
   onBackAndroid() {
-    if (!this.isOnMainScreen()) {
+    if (!this._isOnMainScreen()) {
       this.refs.navigator.pop();
       return true;
     }
@@ -111,12 +116,22 @@ class AppNavigator extends React.Component {
     return false;
   }
 
-  isOnMainScreen() {
-    return this.route.name === 'Explore';
+  onAppStateChange(appState) {
+    if (appState === 'active') {
+      ExploreService.shouldRefresh()
+        .then((shouldRefresh) => {
+          if (shouldRefresh) {
+            this.setState(Object.assign(this.state, {isLoading: true}));
+            return ExploreService.loadExplore()
+              .then(() => this.setState(Object.assign(this.state, {isLoading: false})));
+          }
+        });
+    }
   }
 
   render() {
-    return this.state.initialRoute.name ?
+    return this.state.isLoading ?
+      this.renderLoading() :
       <Navigator
         ref="navigator"
         style={s.container}
@@ -128,8 +143,7 @@ class AppNavigator extends React.Component {
             style={s.navBar}
           />
         }
-      /> :
-      this.renderLoading();
+      />;
   }
 
   renderLoading() {
@@ -138,6 +152,10 @@ class AppNavigator extends React.Component {
         <Text style={s.loading}>Loading...</Text>
       </View>
     );
+  }
+
+  _isOnMainScreen() {
+    return this.route.name === 'Explore';
   }
 }
 
