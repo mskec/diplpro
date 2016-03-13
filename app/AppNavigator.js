@@ -17,8 +17,6 @@ const {
 import {appColors} from './AppConstants';
 import AppStorage from './storage/AppStorage';
 import ExploreScreen from './screens/ExploreScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
 import WatchScreen from './screens/WatchScreen';
 import DebugTools from './utils/DebugTools';
 
@@ -28,7 +26,7 @@ class AppNavigator extends React.Component {
     super();
 
     this.route = {};
-    this.state = {initialRoute: {}};
+    this.state = {initialRoute: {name: 'Explore'}};
 
     this.onRouteChange = this.onRouteChange.bind(this);
     this.onBackAndroid = this.onBackAndroid.bind(this);
@@ -38,11 +36,7 @@ class AppNavigator extends React.Component {
   }
 
   componentDidMount() {
-    AppStorage.state('welcomeShown')
-      .then((welcomeShown) => {
-        const name = welcomeShown ? 'Explore' : 'Welcome';
-        this.setState(Object.assign(this.state, {initialRoute: {name}}));
-      });
+    //
   }
 
   componentWillUnmount() {
@@ -51,10 +45,8 @@ class AppNavigator extends React.Component {
 
   onRouteChange(route: Object, navigator: Object) {
     const routes = {
-      Welcome: <WelcomeScreen navigator={navigator} />,
       Explore: <ExploreScreen navigator={navigator} />,
-      Watch:   <WatchScreen navigator={navigator} vib={route.vib} />,
-      Settings: <SettingsScreen navigator={navigator} />
+      Watch:   <WatchScreen navigator={navigator} vib={route.vib} />
     };
 
     let screen = routes[route.name];
@@ -62,7 +54,7 @@ class AppNavigator extends React.Component {
       return console.error('Unhandled route!', route);
     }
 
-    if (_.contains(['Explore', 'Settings'], route.name)) {
+    if (_.contains(['Explore'], route.name)) {
       screen = <ScrollView>{screen}</ScrollView>;
     }
 
@@ -98,16 +90,7 @@ class AppNavigator extends React.Component {
         return null;
       }
 
-      return (
-        <TouchableOpacity
-          onPress={() => navigator.push({name: 'Settings'})}
-          style={s.navBarRightButton}
-        >
-          <Text style={s.navBarText}>
-            Settings
-          </Text>
-        </TouchableOpacity>
-      );
+      return;
     },
 
     Title: function(route, navigator, index, navState) {
