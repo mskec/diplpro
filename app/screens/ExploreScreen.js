@@ -5,64 +5,97 @@ import React from 'react-native';
 const {
   AppRegistry,
   Image,
+  Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   View,
 } = React;
+import GiftedListView from 'react-native-gifted-listview';
+
 
 import {appColors} from '../AppConstants';
 import {formatDuration} from '../utils/utils';
 import VBStorage from '../storage/VBStorage';
+import Spinner from '../Spinner';
+import Hypertext from '../Hypertext';
 
 
 class ExploreScreen extends React.Component {
   constructor() {
     super();
 
-    this.state = {};
-
+    this.renderVib = this.renderVib.bind(this);
+    this.renderLoadMore = this.renderLoadMore.bind(this);
     this.onVibPress = this.onVibPress.bind(this);
+    this.onPagination = this.onPagination.bind(this);
   }
 
   componentDidMount() {
-    VBStorage.loadExplore()
-      .then(() => VBStorage.getExplore())
-      .then((vibs) => {
-        this.setState(Object.assign(this.state, {vibs}))
-      });
+    VBStorage.loadExplore();
   }
 
   onVibPress(vib: Object) {
     this.props.navigator.push({name: 'Watch', vib});
   }
 
+  onPagination(page, cb, options) {
+    let vibsPerPage = 6;
+    VBStorage.getExplore(page - 1, vibsPerPage)
+      .then((vibs) => {
+        cb(vibs, {allLoaded: vibs.length !== vibsPerPage});
+      });
+  }
+
   render() {
     return (
       <View style={s.container}>
-        {this.renderVibs(this.state.vibs)}
+        {this.renderVibs()}
       </View>
     );
   }
 
-  renderVibs(vibs: Array) {
+  renderVibs() {
     return (
       <View style={s.vibsContainer}>
-        <View style={s.vibsLabelContainer}>
-          <Text style={s.vibsLabel}>Recommended videos</Text>
-        </View>
-
-        <View style={s.vibs}>
-          {_.map(vibs, (vib, idx) => this.renderVib(vib, idx))}
-        </View>
+        <GiftedListView
+          style={s.vibs}
+          rowView={this.renderVib}
+          onFetch={this.onPagination}
+          pagination={true}
+          paginationFetchingView={() => <Spinner />}
+          paginationWaitingView={this.renderLoadMore}
+          paginationAllLoadedView={this.renderAllLoaded}
+        />
       </View>
     );
   }
 
-  renderVib(vib: Object, idx: Number) {
+  renderLoadMore(loadMoreCb) {
+    return (
+      <TouchableOpacity onPress={loadMoreCb} style={s.paginationContainer}>
+        <Text style={s.paginationLabel}>Load more</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  renderAllLoaded() {
+    return (
+      <View style={s.paginationContainer}>
+        <Text style={s.paginationLabel}>No more vibs, go to </Text>
+        <Hypertext
+          href="https://www.vibby.com"
+          text="www.vibby.com"
+        />
+        <Text style={s.paginationLabel}> and create some!</Text>
+      </View>
+    );
+  }
+
+  renderVib(vib: Object) {
     return (
       <View style={s.vibContainer} key={vib._id}>
-        <TouchableHighlight onPress={() => this.onVibPress(vib)}>
+        <TouchableOpacity onPress={() => this.onVibPress(vib)}>
           <View style={s.vibWrapper}>
             <Image
               style={s.vibThumbnail}
@@ -74,7 +107,7 @@ class ExploreScreen extends React.Component {
               <Text style={s.vibDuration}>{formatDuration(vib.duration)}</Text>
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -84,19 +117,10 @@ class ExploreScreen extends React.Component {
 
 const vibsStyles = {
   vibsContainer: {
-    marginTop: 20
-  },
-  vibsLabelContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end'
-  },
-  vibsLabel: {
-    color: appColors.fontColor,
-    fontSize: 18
+
   },
   vibs: {
-    marginTop: 15
+    marginBottom: Platform.OS === 'ios' ? -40 : 0
   },
 
   vibContainer: {
@@ -131,13 +155,25 @@ const vibsStyles = {
   }
 };
 
+const paginationStyles = {
+  paginationContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  paginationLabel: {
+    color: '#FFF'
+  }
+};
+
 const screenStyles = {
   container: {
     margin: 10
   }
 };
 
-const s = StyleSheet.create(Object.assign({}, screenStyles, vibsStyles));
+const s = StyleSheet.create(Object.assign({}, screenStyles, vibsStyles, paginationStyles));
 
 AppRegistry.registerComponent('ExploreScreen', () => ExploreScreen);
 

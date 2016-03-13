@@ -50,10 +50,15 @@ class VBStorage extends Storage {
   }
 
 
-  getExplore() {
+  getExplore(page: Number, count: Number) {
+    page = page || 0;
+    count = count || 8;
+
     return super.getItem('explore')
       .then((vibsJSON) => {
         let vibs = vibsJSON ? JSON.parse(vibsJSON) : [];
+
+        vibs = vibs.splice(page * count, count);     // pagination
 
         return Promise.all(_.map(vibs, (vibId) => this.getVib(vibId)));
       });
@@ -67,7 +72,7 @@ class VBStorage extends Storage {
   }
 
   loadExplore() {
-    return HttpUtils.get('/api/data/story/explore')
+    return HttpUtils.get('/api/data/story/explore?count=100')
       .then((vibs) => {
         const vibIds = [];
 
