@@ -9,6 +9,7 @@ const {
   View
 } = React;
 
+import {appColors} from './AppConstants';
 
 class Spinner extends React.Component {
   render() {
@@ -16,7 +17,7 @@ class Spinner extends React.Component {
       <View>
         {Platform.OS === 'ios' ?
           <ActivityIndicatorIOS /> :
-          <ProgressBarAndroid />
+          <ProgressBarAndroid color={appColors.fontColor} />
         }
       </View>
     )

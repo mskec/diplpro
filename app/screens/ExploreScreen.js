@@ -64,6 +64,7 @@ class ExploreScreen extends React.Component {
         paginationWaitingView={this.renderLoadMore}
         paginationAllLoadedView={this.renderAllLoaded}
         refreshable={true}
+        refreshableColors={[appColors.fontColor]}
       />
     );
   }
