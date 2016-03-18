@@ -17,4 +17,4 @@ class App extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('code', () => App);
+AppRegistry.registerComponent('vibby', () => App);

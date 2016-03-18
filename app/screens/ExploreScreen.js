@@ -4,7 +4,6 @@ import React from 'react-native';
 const {
   AppRegistry,
   Image,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -158,7 +157,7 @@ const paginationStyles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Platform.OS === 'ios' ? -35 : 20,
+    marginBottom: 20
   },
   paginationLabel: {
     color: '#FFF'
