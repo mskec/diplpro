@@ -8,7 +8,6 @@ const {
   BackAndroid,
   Navigator,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -20,6 +19,7 @@ import ExploreService from './services/ExploreService';
 import ExploreScreen from './screens/ExploreScreen';
 import WatchScreen from './screens/WatchScreen';
 import DebugTools from './utils/DebugTools';
+import Spinner from './Spinner';
 
 
 class AppNavigator extends React.Component {
@@ -57,10 +57,6 @@ class AppNavigator extends React.Component {
     let screen = routes[route.name];
     if (!screen) {
       return console.error('Unhandled route!', route);
-    }
-
-    if (_.contains(['Explore'], route.name)) {
-      screen = <ScrollView>{screen}</ScrollView>;
     }
 
     this.route = route;
@@ -149,7 +145,7 @@ class AppNavigator extends React.Component {
   renderLoading() {
     return (
       <View style={[s.container, s.containerLoading]}>
-        <Text style={s.loading}>Loading...</Text>
+        <Spinner />
       </View>
     );
   }
@@ -200,11 +196,6 @@ const navigatorStyles = {
   containerLoading: {
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  loading: {
-    fontSize: 20,
-    textAlign: 'center',
-    color: '#fff'
   },
   screenWrapper: {
     flex: 1,
