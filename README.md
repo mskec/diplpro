@@ -10,4 +10,6 @@ Technical documentation (croatian): [LINK](http://bitlink.me/A7g8A)
 
 Application screenshots: [LINK](http://bitlink.me/WEKqM)
 
+Android apk: [LINK](http://bitlink.me/lG24M)
+
 [Faculty of Electrical Engineering and Computing](http://www.fer.unizg.hr/en), University of Zagreb.
