@@ -41,7 +41,7 @@ class AppNavigator extends React.Component {
   }
 
   componentDidMount() {
-    //
+    this.checkDataAndRefresh();
   }
 
   componentWillUnmount() {
@@ -114,15 +114,19 @@ class AppNavigator extends React.Component {
 
   onAppStateChange(appState) {
     if (appState === 'active') {
-      ExploreService.shouldRefresh()
-        .then((shouldRefresh) => {
-          if (shouldRefresh) {
-            this.setState(Object.assign(this.state, {isLoading: true}));
-            return ExploreService.loadExplore()
-              .then(() => this.setState(Object.assign(this.state, {isLoading: false})));
-          }
-        });
+      this.checkDataAndRefresh();
     }
+  }
+
+  checkDataAndRefresh() {
+    ExploreService.shouldRefresh()
+      .then((shouldRefresh) => {
+        if (shouldRefresh) {
+          this.setState(Object.assign(this.state, {isLoading: true}));
+          return ExploreService.loadExplore()
+            .then(() => this.setState(Object.assign(this.state, {isLoading: false})));
+        }
+      });
   }
 
   render() {
